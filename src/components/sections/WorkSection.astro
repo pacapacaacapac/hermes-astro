@@ -1,0 +1,99 @@
+---
+interface Props {
+  id: string;
+  year: string;
+  title: string;
+  type: string;
+  background: 'video' | 'carousel';
+  videoId?: string;
+  videoHls?: string;
+  videoAutoplay?: boolean;
+  carouselImages?: string[];
+  previewClass: string;
+  previewId: string;
+  previewImage: string;
+  playerBodyId: string;
+  playerType: 'video' | 'audio';
+  playerDataVideo?: string;
+  audioSrc?: string;
+  playerLabel: string;
+}
+
+const {
+  id, year, title, type,
+  background, videoId, videoHls, videoAutoplay,
+  carouselImages,
+  previewClass, previewId, previewImage,
+  playerBodyId, playerType, playerDataVideo, audioSrc, playerLabel,
+} = Astro.props;
+---
+
+<div class="section-wrap">
+  <section id={id} class="section-fullscreen">
+
+    {background === 'video' ? (
+      <video
+        class="bg-media"
+        id={videoId}
+        data-hls={videoHls}
+        loop
+        playsinline
+        autoplay={videoAutoplay}
+        muted={videoAutoplay}
+      ></video>
+    ) : (
+      <div class="carousel bg-media">
+        <div class="carousel-track">
+          {carouselImages?.map(img => (
+            <img loading="lazy" src={img}>
+          ))}
+        </div>
+        <div class="carousel-left"></div>
+        <div class="carousel-right"></div>
+      </div>
+    )}
+
+    <div class="overlay-header-wrap">
+      <div class="overlay-header" onclick="toggleHeader(this)">
+        <span>{year}</span>
+        <span>{title}</span>
+        <span>{type}</span>
+      </div>
+      <button class="overlay-toggle-btn" onclick="toggleHeader(this)">
+        <span class="overlay-toggle-icon">+</span>
+      </button>
+    </div>
+
+    <div class="overlay-header-body">
+      <slot name="body" />
+    </div>
+
+    <div class={previewClass} id={previewId}>
+      <img loading="lazy" src={previewImage} alt="">
+    </div>
+
+    <div class="bottom-player-wrap">
+      <div class="bottom-player-body" id={playerBodyId}>
+        {playerType === 'video' ? (
+          <div class="video-player" data-video={playerDataVideo}>
+            <button class="play">▶</button>
+            <div class="progress"><div class="progress-bar"></div></div>
+          </div>
+        ) : (
+          <div class="audio-player">
+            <button class="play">▶</button>
+            <div class="progress"><div class="progress-bar"></div></div>
+            <audio src={audioSrc}></audio>
+          </div>
+        )}
+      </div>
+      <button
+        class="bottom-player-toggle"
+        onclick={`toggleBottomPlayer('${playerBodyId}', this)`}
+      >
+        {playerLabel}
+      </button>
+    </div>
+
+  </section>
+</div>
