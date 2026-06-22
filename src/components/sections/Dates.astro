@@ -1,5 +1,18 @@
 ---
+import { getConcerts } from '../../lib/sanity'
+
+const concerts = await getConcerts()
+
+const today = new Date().toISOString().split('T')[0]
+const upcoming = concerts.filter(c => c.date >= today)
+const past     = concerts.filter(c => c.date <  today)
+
+function formatDate(iso: string): string {
+  const [year, month, day] = iso.split('-')
+  return `${day}/${month}/${year}`
+}
 ---
+
 <div class="section-wrap">
   <section id="dates-all" class="dates-all-section">
     <div class="dates-all-list">
@@ -10,18 +23,18 @@
         <span class="dates-all-location"></span>
       </div>
 
-      <div class="dates-all-item">
-        <span class="dates-all-date">10/06/2026</span>
-        <span class="dates-all-title">Hörbar</span>
-        <span class="dates-all-detail">Caterpillar, blurred edges festival</span>
-        <span class="dates-all-location">Hamburg, DE</span>
-      </div>
-      <div class="dates-all-item">
-        <span class="dates-all-date">11/07/2026</span>
-        <span class="dates-all-title">Künstlerhaus Lauenburg</span>
-        <span class="dates-all-detail">Resonanzen</span>
-        <span class="dates-all-location">Lauenburg, DE</span>
-      </div>
+      {upcoming.map(c => (
+        <div
+          class="dates-all-item"
+          data-bg={c.imageUrl ?? undefined}
+          data-credit={c.imageCredit ?? undefined}
+        >
+          <span class="dates-all-date">{formatDate(c.date)}</span>
+          <span class="dates-all-title">{c.venue}</span>
+          {c.detail && <span class="dates-all-detail">{c.detail}</span>}
+          <span class="dates-all-location">{c.city}</span>
+        </div>
+      ))}
 
       <div class="dates-all-item dates-all-label" id="dates-past-label">
         <span class="dates-all-date"></span>
@@ -29,180 +42,18 @@
         <span class="dates-all-location"></span>
       </div>
 
-      <div class="dates-all-item" data-bg="./pictures/MomArtSpace.webp">
-        <span class="dates-all-date">27/03/2026</span>
-        <span class="dates-all-title">MOM art space</span>
-        <span class="dates-all-detail">Live Session at Exhibition: FLÜSSE, FLUIDE HORIZONTE.</span>
-        <span class="dates-all-location">Hamburg, DE</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/Flusi_Fuss.webp" data-credit="Photo: Jonas Großkopf">
-        <span class="dates-all-date">14/03/2026</span>
-        <span class="dates-all-title">Flussschifferkirche</span>
-        <span class="dates-all-detail">EP Release Concert</span>
-        <span class="dates-all-location">Hamburg, DE</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/Schimmelreiter_Ausschnitt.webp">
-        <span class="dates-all-date">28/02/2026</span>
-        <span class="dates-all-title">Hörbar/B-Movie</span>
-        <span class="dates-all-detail">Film Screening with Live Soundtrack</span>
-        <span class="dates-all-location">Hamburg, DE</span>
-      </div>
-      <div class="dates-all-item">
-        <span class="dates-all-date">13/09/2025</span>
-        <span class="dates-all-title">Frappant Galerie</span>
-        <span class="dates-all-detail">Concert at Exhibition, Elisa Nessler: CRUSHES</span>
-        <span class="dates-all-location">Hamburg, DE</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/Connect_Skelleftea_by_Tobias_Norrfors.webp" data-credit="Photo: Tobias Norrfors">
-        <span class="dates-all-date">19/08/2025</span>
-        <span class="dates-all-title">Public Space</span>
-        <span class="dates-all-detail">Workshop with Move Makers and Skellefteå Dans & Balettförening</span>
-        <span class="dates-all-location">Skellefteå, SE</span>
-      </div>
-      <div class="dates-all-item">
-        <span class="dates-all-date">13/07/2025</span>
-        <span class="dates-all-title">HFBK</span>
-        <span class="dates-all-detail">Live Listening Session</span>
-        <span class="dates-all-location">Hamburg, DE</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/Hermes_2025.webp" data-credit="Photo: Jona K. Iuelshade">
-        <span class="dates-all-date">12/07/2025</span>
-        <span class="dates-all-title">HFBK</span>
-        <span class="dates-all-detail">Live Listening Session</span>
-        <span class="dates-all-location">Hamburg, DE</span>
-      </div>
-      <div class="dates-all-item">
-        <span class="dates-all-date">11/07/2025</span>
-        <span class="dates-all-title">HFBK</span>
-        <span class="dates-all-detail">Live Listening Session</span>
-        <span class="dates-all-location">Hamburg, DE</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/48hwilhelmsburg.webp">
-        <span class="dates-all-date">14/06/2025</span>
-        <span class="dates-all-title">Wälderhaus</span>
-        <span class="dates-all-detail">48h Wilhelmsburg, Community Festival</span>
-        <span class="dates-all-location">Hamburg, DE</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/Plau-Tour.webp">
-        <span class="dates-all-date">31/05/2025</span>
-        <span class="dates-all-title">Vekks</span>
-        <span class="dates-all-detail">Tour w/PLAU</span>
-        <span class="dates-all-location">Vienna, AT</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/Plau-Tour.webp">
-        <span class="dates-all-date">29/05/2025</span>
-        <span class="dates-all-title">N° Space</span>
-        <span class="dates-all-detail">Tour w/PLAU</span>
-        <span class="dates-all-location">Budapest, HU</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/Plau-Tour.webp">
-        <span class="dates-all-date">27/05/2025</span>
-        <span class="dates-all-title">Kräftner</span>
-        <span class="dates-all-detail">Tour w/PLAU</span>
-        <span class="dates-all-location">Graz, AT</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/Plau-Tour.webp">
-        <span class="dates-all-date">24/05/2025</span>
-        <span class="dates-all-title">Raum der Zeit</span>
-        <span class="dates-all-detail">Tour w/PLAU</span>
-        <span class="dates-all-location">Leipzig, DE</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/Plau-Tour.webp">
-        <span class="dates-all-date">23/05/2025</span>
-        <span class="dates-all-title">Gelegenheiten</span>
-        <span class="dates-all-detail">Tour w/PLAU</span>
-        <span class="dates-all-location">Leipzig, DE</span>
-      </div>
-      <div class="dates-all-item">
-        <span class="dates-all-date">08/04/2025</span>
-        <span class="dates-all-title">Literaturhaus</span>
-        <span class="dates-all-detail">Concert at Exhibition: DUHOVI UPORA, WIDERSTANDSGEISTER, SPIRITS OF RESISTANCE.</span>
-        <span class="dates-all-location">Hamburg, DE</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/Radio-Poster.webp">
-        <span class="dates-all-date">01/02/2025</span>
-        <span class="dates-all-title">Westwerk</span>
-        <span class="dates-all-detail">Concert at Book Presentation: Radio as Radical Education</span>
-        <span class="dates-all-location">Hamburg, DE</span>
-      </div>
-      <div class="dates-all-item">
-        <span class="dates-all-date">30/01/2025</span>
-        <span class="dates-all-title">Public Space</span>
-        <span class="dates-all-detail">Performance with Move Makers: Hold on. Slow Hands,</span>
-        <span class="dates-all-location">Stockholm, SE</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/Pipe-Organ_1.webp" data-credit="Photo: David Reineke">
-        <span class="dates-all-date">10/11/2024</span>
-        <span class="dates-all-title">Christopherushaus</span>
-        <span class="dates-all-detail">Site-specific Concert with Pipe Organ, Literaturfestival</span>
-        <span class="dates-all-location">Hamburg, DE</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/Glistening_Publikum.webp" data-credit="Amelie Pret">
-        <span class="dates-all-date">11/04/2024</span>
-        <span class="dates-all-title">Galerie Phoenix</span>
-        <span class="dates-all-detail">Concert, Curation and Exhibition: Longing</span>
-        <span class="dates-all-location">Bratislava, SK</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/Glistening.webp" data-credit="Photo: Amelie Pret">
-        <span class="dates-all-date">09/04/2024</span>
-        <span class="dates-all-title">A4 Space</span>
-        <span class="dates-all-detail">Glistening</span>
-        <span class="dates-all-location">Bratislava, SK</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/hermes_hemnis_i_punkt_davidreineke_2023_7684.webp" data-credit="Photo: David Reineke">
-        <span class="dates-all-date">18/11/2023</span>
-        <span class="dates-all-title">Skateland, I Punkt</span>
-        <span class="dates-all-detail">Site-specific Concert</span>
-        <span class="dates-all-location">Hamburg, DE</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/NYT_LeoBauer.webp" data-credit="Photo: Leo Bauer">
-        <span class="dates-all-date">13/10/2023</span>
-        <span class="dates-all-title">NYT</span>
-        <span class="dates-all-detail">Concert at Exhibition, Sophia Leitenmayer & Christina Rüesch: Whisper Whisper.</span>
-        <span class="dates-all-location">Berlin, DE</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/TagDanach_1.webp" data-credit="Photo: Büro Mannherz">
-        <span class="dates-all-date">01/10/2023</span>
-        <span class="dates-all-title">Kunstverein Gastgarten</span>
-        <span class="dates-all-detail">Chris Max Paul: Der Tag danach</span>
-        <span class="dates-all-location">Hamburg, DE</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/654430017_18081351362522563_5576149193365751538_n.webp" data-credit="Amelie Pret">
-        <span class="dates-all-date">09/09/2023</span>
-        <span class="dates-all-title">MS Stubnitz</span>
-        <span class="dates-all-detail">Floating Transmissions</span>
-        <span class="dates-all-location">Hamburg, DE</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/Raum42_5_Ausstellung_TIM4323.webp" data-credit="Photo: Tim Albrecht">
-        <span class="dates-all-date">16/07/2023</span>
-        <span class="dates-all-title">HFBK</span>
-        <span class="dates-all-detail">w/Frank Koenen</span>
-        <span class="dates-all-location">Hamburg, DE</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/Raum42_5_Ausstellung_TIM4323.webp" data-credit="Photo: Tim Albrecht">
-        <span class="dates-all-date">15/07/2023</span>
-        <span class="dates-all-title">HFBK</span>
-        <span class="dates-all-detail">w/Frank Koenen</span>
-        <span class="dates-all-location">Hamburg, DE</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/Raum42_5_Ausstellung_TIM4323.webp" data-credit="Photo: Tim Albrecht">
-        <span class="dates-all-date">14/07/2023</span>
-        <span class="dates-all-title">HFBK</span>
-        <span class="dates-all-detail">w/Frank Koenen</span>
-        <span class="dates-all-location">Hamburg, DE</span>
-      </div>
-      <div class="dates-all-item" data-bg="./pictures/RisottoamStrand_%20LukesEngelhardt.webp" data-credit="Photo: Lukes Engelhardt">
-        <span class="dates-all-date">16/06/2023</span>
-        <span class="dates-all-title">HFBK</span>
-        <span class="dates-all-detail">Risotto Am Strand, Performance</span>
-        <span class="dates-all-location">Hamburg, DE</span>
-      </div>
-      <div class="dates-all-item">
-        <span class="dates-all-date">22/06/2023</span>
-        <span class="dates-all-title">Kulturhaus 73</span>
-        <span class="dates-all-detail">Hammer, Amboss, Steigbügel.</span>
-        <span class="dates-all-location">Hamburg, DE</span>
-      </div>
+      {past.map(c => (
+        <div
+          class="dates-all-item"
+          data-bg={c.imageUrl ?? undefined}
+          data-credit={c.imageCredit ?? undefined}
+        >
+          <span class="dates-all-date">{formatDate(c.date)}</span>
+          <span class="dates-all-title">{c.venue}</span>
+          {c.detail && <span class="dates-all-detail">{c.detail}</span>}
+          <span class="dates-all-location">{c.city}</span>
+        </div>
+      ))}
 
     </div>
   </section>
