@@ -18,15 +18,22 @@ export interface Concert {
 }
 
 export async function getConcerts(): Promise<Concert[]> {
-  return sanityClient.fetch(
-    `*[_type == "concert"] | order(date desc) {
-      _id,
-      date,
-      venue,
-      detail,
-      city,
-      "imageUrl": image.asset->url,
-      imageCredit
-    }`
-  )
+  try {
+    const result = await sanityClient.fetch<Concert[]>(
+      `*[_type == "concert"] | order(date desc) {
+        _id,
+        date,
+        venue,
+        detail,
+        city,
+        "imageUrl": image.asset->url,
+        imageCredit
+      }`
+    )
+    console.log(`[Sanity] getConcerts: ${result.length} Einträge gefunden`)
+    return result
+  } catch (err) {
+    console.error('[Sanity] getConcerts fehlgeschlagen:', err)
+    throw err
+  }
 }
